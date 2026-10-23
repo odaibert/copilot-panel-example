@@ -214,8 +214,58 @@ unsupported-host errors. They do not visually verify the interactive renderer.
 Locate the SDK bundled with your own CLI instead of copying a machine-specific
 path.
 
+The screenshots below additionally verify the actual interactive dialog in
+Copilot CLI 1.0.103 running in Apple Terminal.
+
 For learning, start with `test/dashboard.test.mjs`: emit a synthetic usage event,
 invoke the registered handler, and inspect the dialog message. Then read
 `test/collector.test.mjs` for model-query races and `test/metrics.test.mjs` for
 attribution and accounting edge cases. To add a metric, update the accounting
 boundary, add a focused behavior test, and only then expose it in `snapshot()`.
+
+## 11. Reproduce the screenshots
+
+These are actual window captures from a fresh interactive demo session on macOS,
+cropped to the native dialog. The text and counters were not replaced or
+generated for the images.
+
+1. Start `copilot --plugin-dir "$PWD"` from the repository root.
+2. Run `/odaibert-dashboard` before submitting a model prompt. The selected model
+   is available, but observed usage is zero.
+3. Dismiss the dialog. For the populated capture, the session used model selection
+   `auto`. If needed, select it using `/model`.
+4. Submit: `For this dashboard demo, reply with exactly: Hello from the Copilot
+   panel example. Do not use tools or read files.`
+5. Wait for the response, then reopen `/odaibert-dashboard`.
+6. Capture only the demo window using your operating system's screenshot tool.
+   On macOS, window capture requires Screen Recording permission for the
+   capturing application. Crop to the dialog before publishing.
+
+### Before a model request
+
+![Initial native dialog with model selection and zero observed calls](images/dashboard-empty.png)
+
+The initial selection was `gpt-6.1-sol`. **Last main call** is unknown because no
+usage has been observed. The zero counters are expected: requesting this snapshot
+does not invoke a model.
+
+### After a real model request
+
+![Native dialog with real API-call counters and per-model usage](images/dashboard-usage.png)
+
+The selected model is now `auto`, while the observed usage event names
+`gpt-6-luna`. The snapshot contains **23,057 input tokens**, **12 output tokens**,
+and **23,054 cache-write tokens**. Cache writes are shown separately, not added
+to input again. Token counts vary with model routing and session context; a short
+user prompt does not mean a small total input because the model also receives
+its instructions and other context.
+
+The collector placed this demo call under **Other classified work** rather than
+**Main**, leaving **Last main call** unknown. This capture therefore demonstrates
+overall/per-model accounting, not verified main-agent attribution. There were no
+subagent calls in the demo; the subagent section correctly remains empty.
+
+The dialog heading **Copilot needs information.** and its dismissal controls are
+host-provided elicitation UI. That is why this looks different from `/tasks`:
+the extension supplies a message, not its own terminal component. Reopen the
+command to refresh; an already-open image is not evidence of live updating.

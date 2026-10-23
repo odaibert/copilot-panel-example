@@ -9,6 +9,26 @@ An educational example of registering a slash command, observing session events,
 and displaying deterministic results through the host's native UI.
 Follow the [implementation walkthrough](docs/IMPLEMENTATION.md) to learn how it works.
 
+## Screenshots
+
+Actual Copilot CLI 1.0.103 dialogs in Apple Terminal, cropped to the dashboard.
+No mock data or reconstructed terminal rendering.
+
+**After a real model request:** the selected model is `auto`, and the usage event
+reports `gpt-6-luna` with 23,057 input and 12 output tokens. Attribution remains
+conservative: this call appears under **Other classified work**, so **Last main
+call** stays unknown. No subagents were run in this demo.
+
+![Native dashboard with observed model and token usage](docs/images/dashboard-usage.png)
+
+**Before any model request:** the dashboard already opens, but all usage totals
+are zero. Opening the dashboard itself does not make a model request.
+
+![Native dashboard before any model calls](docs/images/dashboard-empty.png)
+
+See [how these screenshots were captured](docs/IMPLEMENTATION.md#11-reproduce-the-screenshots)
+for the exact demo steps and interpretation.
+
 ## Run
 
 Requires existing Node.js 22+ and Copilot CLI with extension commands and native
