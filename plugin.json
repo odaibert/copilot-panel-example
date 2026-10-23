@@ -1,0 +1,7 @@
+{
+  "name": "token-usage",
+  "version": "1.0.0",
+  "description": "Observed token usage in a native Copilot CLI snapshot dialog",
+  "author": { "name": "odaibert" },
+  "extensions": ["./extensions"]
+}

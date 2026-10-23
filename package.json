@@ -1,0 +1,17 @@
+{
+  "name": "copilot-panel-example",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Native Copilot CLI token usage snapshot dialog",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/odaibert/copilot-panel-example.git"
+  },
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node bin/launch.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "node --check bin/launch.mjs && node --check lib/metrics.mjs && node --check lib/collector.mjs && node --check lib/dashboard.mjs && node --check extensions/token-usage/extension.mjs"
+  }
+}
